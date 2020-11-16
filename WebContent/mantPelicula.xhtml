@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Mantenimiento de Peliculas</title>
+</head>
+<body>
+
+	<ui:composition template="/plantillas/plantilla.xhtml">
+		<ui:define name="body">
+		
+			<h3 style="color:red;">Lista de Peliculas</h3>
+			<h:form rendered="#{not empty formulario.pelList}">
+				<h:inputText value="#{formulario.item.pelNom}"/>
+				<h:commandButton value="Buscar" action="#{formulario.buscar}"/>
+				<h:dataTable value="#{formulario.pelList}" var="item" rules="all">
+					<h:column>
+						<f:facet name="header">Codigo</f:facet>
+						#{item.pelCod}
+					</h:column>
+					<h:column>
+						<f:facet name="header">Nombre</f:facet>
+						#{item.pelNom}
+					</h:column>
+					<h:column>
+						<f:facet name="header">Genero</f:facet>
+						#{item.tbGenero.genNom}
+					</h:column>
+					<h:column>
+						<f:facet name="header"><h:outputText value="Hora Inicio"></h:outputText></f:facet>
+						<h:outputText value="#{item.pelHini}"></h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header"><h:outputText value="Editar"></h:outputText></f:facet>
+						<h:commandButton value="edit" action="#{formulario.edit(item)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Eliminar"></h:outputText>
+						</f:facet>
+						<h:commandButton value="delete" action="#{formulario.delete(item)}" />
+					</h:column>
+				</h:dataTable>
+			</h:form>
+			<h:panelGroup rendered="#{empty formulario.pelList}">
+				<p>La Tabla está vacía! Por favor agregar nuevas peliculas.</p>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{!formulario.edit}">
+				<h3 style="color:red;">Nueva Pelicula</h3>
+				
+				<h:form>
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Pelicula" />
+						<h:inputText value="#{formulario.item.pelNom}" required="true" id="pelNom"/>
+						<h:message for="pelNom"/>
+						
+						<h:outputLabel value="Genero" />
+						<h:selectOneListbox value="#{formulario.item.tbGenero.genCod}" size="1" id="genCod">
+							<f:selectItems value="#{formulario.genList}" var="gen" itemLabel="#{gen.genNom}" itemValue="#{gen.genCod}" />
+						</h:selectOneListbox>
+						<h:message for="genCod"/>
+
+						<h:outputLabel value="Hora Inicio" />
+						<h:inputText value="#{formulario.item.pelHini}" id="pelHini"/>
+						<h:message for="pelHini"/>
+
+						<h:commandButton value="Registrar" action="#{formulario.add}" />
+					</h:panelGrid>
+				</h:form>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{formulario.edit}">
+				<h3 style="color:red;">Editar Pelicula #{formulario.item.pelCod}</h3>
+				
+				<h:form>
+					<h:panelGrid columns="3">
+						<h:outputLabel value="Pelicula" />
+						<h:inputText value="#{formulario.item.pelNom}" required="true" id="pelNom"/>
+						<h:message for="pelNom"/>
+						
+						<h:outputLabel value="Genero" />
+						<h:selectOneListbox value="#{formulario.item.tbGenero.genCod}" size="1" id="genCod">
+							<f:selectItems value="#{formulario.genList}" var="gen" itemLabel="#{gen.genNom}" itemValue="#{gen.genCod}" />
+						</h:selectOneListbox>
+						<h:message for="genCod"/>
+
+						<h:outputLabel value="Hora Inicio" />
+						<h:inputText value="#{formulario.item.pelHini}" id="pelHini"/>
+						<h:message for="pelHini"/>
+
+						<h:commandButton value="Editar" action="#{formulario.save}" />
+					</h:panelGrid>
+				</h:form>
+			</h:panelGroup>
+
+			<h:messages globalOnly="true"/>
+			
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>
